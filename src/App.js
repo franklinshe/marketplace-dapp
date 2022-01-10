@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Container, Row, Col } from "react-bootstrap";
+import Buyers from "./components/Buyers";
+import Suppliers from "./components/Suppliers";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Marketplace Dapp</h1>
+      <Container>
+        <Row>
+          <Col xs={12} md={6}>
+            <Buyers />
+          </Col>
+          <Col xs={12} md={6}>
+            <Suppliers />
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }
