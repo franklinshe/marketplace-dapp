@@ -12,8 +12,8 @@ class Suppliers extends Component {
       <Card>
         <Card.Header>Sell</Card.Header>
         <Card.Body>
-          <Tabs defaultActiveKey="list" id="sell-tab">
-            <Tab eventKey="list" title="List">
+          <Tabs defaultActiveKey="newListing" id="sell-tab">
+            <Tab eventKey="newListing" title="New Listing">
               <Form>
                 <Form.Group className="mb-3" controlId="formItemName">
                   <Form.Label>Item Name</Form.Label>
@@ -34,7 +34,27 @@ class Suppliers extends Component {
                 </Button>
               </Form>
             </Tab>
-            <Tab eventKey="process" title="Process">
+            <Tab eventKey="prevListings" title="Your Listings">
+              <Table striped bordered hover size="sm">
+                <thead>
+                  <tr>
+                    <th>Item Name</th>
+                    <th>Price</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Coffee Beans</td>
+                    <td>$4.00</td>
+                    <td>
+                      <a>Remove</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            </Tab>
+            <Tab eventKey="process" title="Process Orders">
               Orders to be processed
               <Table striped bordered hover size="sm">
                 <thead>
@@ -43,6 +63,7 @@ class Suppliers extends Component {
                     <th>Customer</th>
                     <th>Item Name</th>
                     <th>Quantity</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -51,6 +72,9 @@ class Suppliers extends Component {
                     <td>Mark</td>
                     <td>Coffee Beans</td>
                     <td>2</td>
+                    <td>
+                      <a>Process</a>
+                    </td>
                   </tr>
                 </tbody>
               </Table>
