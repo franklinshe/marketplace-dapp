@@ -167,24 +167,14 @@
   "ast": {
     "absolutePath": "project:/contracts/Seller.sol",
     "exportedSymbols": {
-      "Seller": [
-        283
-      ]
+      "Seller": [283]
     },
     "id": 284,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 140,
-        "literals": [
-          "solidity",
-          ">=",
-          "0.4",
-          ".21",
-          "<",
-          "8.10",
-          ".0"
-        ],
+        "literals": ["solidity", ">=", "0.4", ".21", "<", "8.10", ".0"],
         "nodeType": "PragmaDirective",
         "src": "32:33:1"
       },
@@ -195,9 +185,7 @@
         "documentation": null,
         "fullyImplemented": true,
         "id": 283,
-        "linearizedBaseContracts": [
-          283
-        ],
+        "linearizedBaseContracts": [283],
         "name": "Seller",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -670,9 +658,7 @@
               "src": "707:152:1",
               "statements": [
                 {
-                  "assignments": [
-                    186
-                  ],
+                  "assignments": [186],
                   "declarations": [
                     {
                       "constant": false,
@@ -1955,23 +1941,13 @@
     "attributes": {
       "absolutePath": "project:/contracts/Seller.sol",
       "exportedSymbols": {
-        "Seller": [
-          283
-        ]
+        "Seller": [283]
       }
     },
     "children": [
       {
         "attributes": {
-          "literals": [
-            "solidity",
-            ">=",
-            "0.4",
-            ".21",
-            "<",
-            "8.10",
-            ".0"
-          ]
+          "literals": ["solidity", ">=", "0.4", ".21", "<", "8.10", ".0"]
         },
         "id": 140,
         "name": "PragmaDirective",
@@ -1979,18 +1955,12 @@
       },
       {
         "attributes": {
-          "baseContracts": [
-            null
-          ],
-          "contractDependencies": [
-            null
-          ],
+          "baseContracts": [null],
+          "contractDependencies": [null],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
-          "linearizedBaseContracts": [
-            283
-          ],
+          "linearizedBaseContracts": [283],
           "name": "Seller",
           "scope": 284
         },
@@ -2475,9 +2445,7 @@
               "implemented": true,
               "isConstructor": false,
               "kind": "function",
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "addItem",
               "scope": 283,
               "stateMutability": "nonpayable",
@@ -2546,9 +2514,7 @@
               },
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 184,
@@ -2559,9 +2525,7 @@
                 "children": [
                   {
                     "attributes": {
-                      "assignments": [
-                        186
-                      ]
+                      "assignments": [186]
                     },
                     "children": [
                       {
@@ -2605,9 +2569,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 168,
                               "type": "uint256",
                               "value": "numberOfItemsAvailableForSale"
@@ -2652,9 +2614,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 174,
                                   "type": "mapping(uint256 => struct Seller.Item storage ref)",
                                   "value": "items"
@@ -2666,9 +2626,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 186,
                                   "type": "uint256",
                                   "value": "idItem"
@@ -2690,9 +2648,7 @@
                               "isPure": false,
                               "isStructConstructorCall": true,
                               "lValueRequested": false,
-                              "names": [
-                                null
-                              ],
+                              "names": [null],
                               "type": "struct Seller.Item memory",
                               "type_conversion": false
                             },
@@ -2713,9 +2669,7 @@
                                       "typeString": "uint256"
                                     }
                                   ],
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 159,
                                   "type": "type(struct Seller.Item storage pointer)",
                                   "value": "Item"
@@ -2727,9 +2681,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 186,
                                   "type": "uint256",
                                   "value": "idItem"
@@ -2741,9 +2693,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 180,
                                   "type": "bytes32",
                                   "value": "itemName"
@@ -2755,9 +2705,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 182,
                                   "type": "uint256",
                                   "value": "price"
@@ -2791,9 +2739,7 @@
                           "isPure": false,
                           "isStructConstructorCall": false,
                           "lValueRequested": false,
-                          "names": [
-                            null
-                          ],
+                          "names": [null],
                           "type": "tuple()",
                           "type_conversion": false
                         },
@@ -2806,9 +2752,7 @@
                                   "typeString": "uint256"
                                 }
                               ],
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 144,
                               "type": "function (uint256)",
                               "value": "ItemAdded"
@@ -2820,9 +2764,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 186,
                               "type": "uint256",
                               "value": "idItem"
@@ -2857,9 +2799,7 @@
               "implemented": true,
               "isConstructor": false,
               "kind": "function",
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "processOrder",
               "scope": 283,
               "stateMutability": "nonpayable",
@@ -2928,9 +2868,7 @@
               },
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 211,
@@ -2965,9 +2903,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 178,
                                   "type": "mapping(uint256 => struct Seller.Orderlog storage ref)",
                                   "value": "orderLogs"
@@ -2979,9 +2915,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 207,
                                   "type": "uint256",
                                   "value": "idOrder"
@@ -3003,9 +2937,7 @@
                               "isPure": false,
                               "isStructConstructorCall": true,
                               "lValueRequested": false,
-                              "names": [
-                                null
-                              ],
+                              "names": [null],
                               "type": "struct Seller.Orderlog memory",
                               "type_conversion": false
                             },
@@ -3026,9 +2958,7 @@
                                       "typeString": "bool"
                                     }
                                   ],
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 166,
                                   "type": "type(struct Seller.Orderlog storage pointer)",
                                   "value": "Orderlog"
@@ -3040,9 +2970,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 209,
                                   "type": "uint256",
                                   "value": "idCustomer"
@@ -3054,9 +2982,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 207,
                                   "type": "uint256",
                                   "value": "idOrder"
@@ -3114,9 +3040,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 170,
                               "type": "uint256",
                               "value": "numberOfOrdersProcessed"
@@ -3145,9 +3069,7 @@
                           "isPure": false,
                           "isStructConstructorCall": false,
                           "lValueRequested": false,
-                          "names": [
-                            null
-                          ],
+                          "names": [null],
                           "type": "tuple()",
                           "type_conversion": false
                         },
@@ -3168,9 +3090,7 @@
                                   "typeString": "bool"
                                 }
                               ],
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 152,
                               "type": "function (uint256,uint256,bool)",
                               "value": "ProcessAnOrder"
@@ -3182,9 +3102,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 209,
                               "type": "uint256",
                               "value": "idCustomer"
@@ -3196,9 +3114,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 207,
                               "type": "uint256",
                               "value": "idOrder"
@@ -3250,9 +3166,7 @@
               "implemented": true,
               "isConstructor": false,
               "kind": "function",
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "getItem",
               "scope": 283,
               "stateMutability": "view",
@@ -3395,9 +3309,7 @@
                                   {
                                     "attributes": {
                                       "argumentTypes": null,
-                                      "overloadedDeclarations": [
-                                        null
-                                      ],
+                                      "overloadedDeclarations": [null],
                                       "referencedDeclaration": 174,
                                       "type": "mapping(uint256 => struct Seller.Item storage ref)",
                                       "value": "items"
@@ -3409,9 +3321,7 @@
                                   {
                                     "attributes": {
                                       "argumentTypes": null,
-                                      "overloadedDeclarations": [
-                                        null
-                                      ],
+                                      "overloadedDeclarations": [null],
                                       "referencedDeclaration": 234,
                                       "type": "uint256",
                                       "value": "idItem"
@@ -3455,9 +3365,7 @@
                                   {
                                     "attributes": {
                                       "argumentTypes": null,
-                                      "overloadedDeclarations": [
-                                        null
-                                      ],
+                                      "overloadedDeclarations": [null],
                                       "referencedDeclaration": 174,
                                       "type": "mapping(uint256 => struct Seller.Item storage ref)",
                                       "value": "items"
@@ -3469,9 +3377,7 @@
                                   {
                                     "attributes": {
                                       "argumentTypes": null,
-                                      "overloadedDeclarations": [
-                                        null
-                                      ],
+                                      "overloadedDeclarations": [null],
                                       "referencedDeclaration": 234,
                                       "type": "uint256",
                                       "value": "idItem"
@@ -3516,9 +3422,7 @@
               "implemented": true,
               "isConstructor": false,
               "kind": "function",
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "getStatus",
               "scope": 283,
               "stateMutability": "view",
@@ -3635,9 +3539,7 @@
                                   {
                                     "attributes": {
                                       "argumentTypes": null,
-                                      "overloadedDeclarations": [
-                                        null
-                                      ],
+                                      "overloadedDeclarations": [null],
                                       "referencedDeclaration": 178,
                                       "type": "mapping(uint256 => struct Seller.Orderlog storage ref)",
                                       "value": "orderLogs"
@@ -3649,9 +3551,7 @@
                                   {
                                     "attributes": {
                                       "argumentTypes": null,
-                                      "overloadedDeclarations": [
-                                        null
-                                      ],
+                                      "overloadedDeclarations": [null],
                                       "referencedDeclaration": 254,
                                       "type": "uint256",
                                       "value": "idOrder"
@@ -3696,9 +3596,7 @@
               "implemented": true,
               "isConstructor": false,
               "kind": "function",
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "getTotalNumberOfAvailableItems",
               "scope": 283,
               "stateMutability": "view",
@@ -3708,9 +3606,7 @@
             "children": [
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 267,
@@ -3760,9 +3656,7 @@
                       {
                         "attributes": {
                           "argumentTypes": null,
-                          "overloadedDeclarations": [
-                            null
-                          ],
+                          "overloadedDeclarations": [null],
                           "referencedDeclaration": 168,
                           "type": "uint256",
                           "value": "numberOfItemsAvailableForSale"
@@ -3792,9 +3686,7 @@
               "implemented": true,
               "isConstructor": false,
               "kind": "function",
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "getTotalNumberOfOrdersProcessed",
               "scope": 283,
               "stateMutability": "view",
@@ -3804,9 +3696,7 @@
             "children": [
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 275,
@@ -3856,9 +3746,7 @@
                       {
                         "attributes": {
                           "argumentTypes": null,
-                          "overloadedDeclarations": [
-                            null
-                          ],
+                          "overloadedDeclarations": [null],
                           "referencedDeclaration": 170,
                           "type": "uint256",
                           "value": "numberOfOrdersProcessed"
