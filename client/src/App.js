@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import React, { useState, useEffect } from "react";
 import BuyerContract from "./contracts/Buyer.json";
 import SellerContract from "./contracts/Seller.json";
 import getWeb3 from "./getWeb3";
@@ -11,17 +10,14 @@ import Col from "react-bootstrap/Col";
 
 import "./App.css";
 
-class App extends Component {
-  state = {
-    web3: null,
-    accounts: null,
-    buyerContract: null,
-    sellerContract: null,
-  };
+const App = () => {
+  const [web3, setWeb3] = useState(null);
+  const [accounts, setAccounts] = useState();
+  const [buyerContract, setBuyerContract] = useState();
+  const [sellerContract, setSellerContract] = useState();
 
-  componentDidMount = async () => {
-    try {
-      // Get network provider and web3 instance.
+  useEffect(() => {
+    async function getContracts() {
       const web3 = await getWeb3();
 
       // Use web3 to get the user's accounts.
@@ -42,61 +38,62 @@ class App extends Component {
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState(
-        {
-          web3,
-          accounts,
-          buyerContract: buyerInstance,
-          sellerContract: sellerInstance,
-        },
-        this.runExample
-      );
-    } catch (error) {
-      // Catch any errors for any of the above operations.
-      alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`
-      );
-      console.error(error);
+      setWeb3(web3);
+      setAccounts(accounts);
+      setBuyerContract(buyerInstance);
+      setSellerContract(sellerInstance);
+      console.log(sellerInstance);
     }
-  };
 
-  runExample = async () => {
-    const { accounts, buyerContract, sellerContract } = this.state;
+    getContracts();
+  }, []);
 
-    console.log(accounts);
-    console.log(buyerContract);
-    console.log(sellerContract);
+  // runExample = async () => {
+  //   const { accounts, buyerContract, sellerContract } = this.state;
 
-    // Stores a given value, 5 by default.
-    // await contract.methods.set(5).send({ from: accounts[0] });
+  //   console.log(accounts);
+  //   console.log(buyerContract);
+  //   console.log(sellerContract);
 
-    // Get the value from the contract to prove it worked.
-    // const response = await contract.methods.get().call();
+  //   // Stores a given value, 5 by default.
+  //   // await contract.methods.set(5).send({ from: accounts[0] });
 
-    // Update state with the result.
-    // this.setState({ storageValue: response });
-  };
+  //   // Get the value from the contract to prove it worked.
+  //   // const response = await contract.methods.get().call();
 
-  render() {
-    if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
-    }
-    return (
-      <div className="App">
-        <h1>Marketplace Dapp</h1>
-        <Container>
-          <Row>
-            <Col xs={12} md={6}>
-              <Buyers />
-            </Col>
-            <Col xs={12} md={6}>
-              <Suppliers />
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    );
-  }
-}
+  //   // Update state with the result.
+  //   // this.setState({ storageValue: response });
+  // };
+
+  return (
+    <div className="App">
+      <h1>Marketplace Dapp</h1>
+      <Container>
+        <Row>
+          <Col xs={12} md={6}>
+            {web3 && accounts && buyerContract && sellerContract && (
+              <Buyers
+                web3={web3}
+                accounts={accounts}
+                buyerContract={buyerContract}
+                sellerContract={sellerContract}
+              />
+            )}
+          </Col>
+          <Col xs={12} md={6}>
+            {web3 && accounts && buyerContract && sellerContract && (
+              <Suppliers
+                web3={web3}
+                accounts={accounts}
+                buyerContract={buyerContract}
+                sellerContract={sellerContract}
+              />
+            )}
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
 
 export default App;

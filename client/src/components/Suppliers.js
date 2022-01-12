@@ -7,6 +7,127 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
 class Suppliers extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sellerContract_blockchainRecordedItemIds: [],
+      sellerContract_blockchainRecordedPurchaseOrderServices: [],
+      customerContract_blockchainRecordedPurchaseOrderIds: [],
+    };
+    console.log(this.state);
+  }
+
+  // componentDidMount() {
+  //   this.triggerSupplierContractEventListeners();
+  //   console.log(this.state);
+  // }
+
+  // triggerSupplierContractEventListeners() {
+  //   this.props.sellerContract.events.ItemAdded(
+  //     {},
+  //     {
+  //       fromBlock: 0,
+  //       toBlock: "latest",
+  //     },
+  //     (err, eventLogs) => {
+  //       if (err) {
+  //         console.error("[Event Listener Error]", err);
+  //       } else {
+  //         console.log("[Event Logs]", eventLogs);
+  //         this.setState({
+  //           supplierContract_blockchainRecordedItemIds: [
+  //             ...this.state.supplierContract_blockchainRecordedItemIds,
+  //             parseInt(eventLogs.args.idItem.toString()),
+  //           ],
+  //         });
+  //       }
+  //     }
+  //   );
+
+  //   this.props.sellerContract.events.ProcessAnOrder(
+  //     {},
+  //     {
+  //       fromBlock: 0,
+  //       toBlock: "latest",
+  //     },
+  //     (err, eventLogs) => {
+  //       if (err) {
+  //         console.error("[Event Listener Error]", err);
+  //       } else {
+  //         console.log("[Event Logs]", eventLogs);
+  //         this.setState({
+  //           supplierContract_blockchainRecordedPurchaseOrderServices: [
+  //             ...this.state
+  //               .supplierContract_blockchainRecordedPurchaseOrderServices,
+  //             {
+  //               idOfCustomer: parseInt(eventLogs.args.idOfCustomer.toString()),
+  //               idOrder: parseInt(eventLogs.args.idOrder.toString()),
+  //               status: eventLogs.args.status,
+  //             },
+  //           ],
+  //         });
+  //       }
+  //     }
+  //   );
+
+  //   this.props.buyerContract.events.OrderRaisedOrUpdated(
+  //     {},
+  //     {
+  //       fromBlock: 0,
+  //       toBlock: "latest",
+  //     },
+  //     (err, eventLogs) => {
+  //       if (err) {
+  //         console.error("[Event Listener Error]", err);
+  //       } else {
+  //         console.log("[Event Logs]", eventLogs);
+  //         if (
+  //           this.state.customerContract_blockchainRecordedPurchaseOrderIds.indexOf(
+  //             parseInt(eventLogs.args.idOrder.toString())
+  //           ) === -1
+  //         ) {
+  //           this.setState({
+  //             customerContract_blockchainRecordedPurchaseOrderIds: [
+  //               ...this.state
+  //                 .customerContract_blockchainRecordedPurchaseOrderIds,
+  //               parseInt(eventLogs.args.idOrder.toString()),
+  //             ],
+  //           });
+  //         }
+  //       }
+  //     }
+  //   );
+  // }
+
+  addNewItemToMarketBySupplier = async (e) => {
+    e.preventDefault();
+    const { web3, accounts, sellerContract } = this.props;
+    const itemName = e.target.elements.formItemName.value;
+    const price = e.target.elements.formPrice.value;
+
+    const response = await sellerContract.methods
+      .addItem(web3.utils.asciiToHex(itemName), price)
+      .send(
+        {
+          from: accounts[0],
+          gas: 200000,
+        }
+        // function (err, result) {
+        //   if (err) {
+        //     console.error(
+        //       "[Supplier Contract] Error during adding new item to marketPlace",
+        //       err
+        //     );
+        //   } else {
+        //     console.log(
+        //       "[Supplier Contract] - New Item added to Marketplace",
+        //       result
+        //     );
+        //   }
+        // }
+      );
+  };
+
   render() {
     return (
       <Card>
@@ -14,7 +135,7 @@ class Suppliers extends Component {
         <Card.Body>
           <Tabs defaultActiveKey="newListing" id="sell-tab">
             <Tab eventKey="newListing" title="New Listing">
-              <Form>
+              <Form onSubmit={this.addNewItemToMarketBySupplier}>
                 <Form.Group className="mb-3" controlId="formItemName">
                   <Form.Label>Item Name</Form.Label>
                   <Form.Control
