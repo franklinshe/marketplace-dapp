@@ -11,7 +11,6 @@ class Suppliers extends Component {
     super(props);
     this.state = {
       sellerContractMarketItems: [],
-      sellerContract_blockchainRecordedPurchaseOrderServices: [],
       buyerContractPurchasedItems: [],
     };
   }
@@ -21,13 +20,15 @@ class Suppliers extends Component {
   }
 
   contractEventListeners = () => {
-    this.props.sellerContract.events
+    const { sellerContract, buyerContract } = this.props;
+
+    sellerContract.events
       .ItemAdded({
-        filter: {}, // Using an array means OR: e.g. 20 or 23
+        filter: {},
         fromBlock: 0,
       })
       .on("data", (event) => {
-        console.log(event); // same results as the optional callback above
+        console.log(event);
         this.setState({
           sellerContractMarketItems: [
             ...this.state.sellerContractMarketItems,
@@ -41,24 +42,48 @@ class Suppliers extends Component {
       })
       .on("error", console.error);
 
-    this.props.buyerContract.events
+    buyerContract.events
       .OrderRaisedOrUpdated({
-        filter: {}, // Using an array means OR: e.g. 20 or 23
+        filter: {},
         fromBlock: 0,
       })
       .on("data", (event) => {
-        console.log(event); // same results as the optional callback above
+        console.log(event);
         this.setState({
           buyerContractPurchasedItems: [
             ...this.state.buyerContractPurchasedItems,
-            parseInt(event.returnValues.idOrder.toString()),
+            {
+              id: parseInt(event.returnValues.idOrder.toString()),
+              name: event.returnValues.itemName.toString(),
+              quantity: parseInt(event.returnValues.quantity.toString()),
+              status: event.returnValues.status,
+            },
           ],
         });
       })
       .on("error", console.error);
+
+    sellerContract.events
+      .ProcessAnOrder({
+        filter: {},
+        fromBlock: 0,
+      })
+      .on("data", (event) => {
+        console.log(event);
+        this.setState((prevState) => ({
+          buyerContractPurchasedItems:
+            prevState.buyerContractPurchasedItems.map((item) =>
+              item.id == event.returnValues.idOrder
+                ? { ...item, status: event.returnValues.status }
+                : item
+            ),
+        }));
+        console.log(this.state);
+      })
+      .on("error", console.error);
   };
 
-  addNewItemToMarketBySupplier = async (e) => {
+  addItem = async (e) => {
     e.preventDefault();
     const { accounts, sellerContract } = this.props;
     const itemName = e.target.elements.formItemName.value;
@@ -71,15 +96,27 @@ class Suppliers extends Component {
       },
       function (err, result) {
         if (err) {
-          console.error(
-            "[Supplier Contract] Error during adding new item to marketPlace",
-            err
-          );
+          console.error("[Supplier Contract] Error adding item", err);
         } else {
-          console.log(
-            "[Supplier Contract] - New Item added to Marketplace",
-            result
-          );
+          console.log("[Supplier Contract] New item added", result);
+        }
+      }
+    );
+  };
+
+  processOrder = async (itemId, customerId) => {
+    const { accounts, sellerContract } = this.props;
+
+    await sellerContract.methods.processOrder(itemId, customerId).send(
+      {
+        from: accounts[0],
+        gas: 200000,
+      },
+      function (err, result) {
+        if (err) {
+          console.error("[Supplier Contract] Error processing an order", err);
+        } else {
+          console.log("[Supplier Contract] Order processed", result);
         }
       }
     );
@@ -92,7 +129,7 @@ class Suppliers extends Component {
         <Card.Body>
           <Tabs defaultActiveKey="newListing" id="sell-tab">
             <Tab eventKey="newListing" title="New Listing">
-              <Form onSubmit={this.addNewItemToMarketBySupplier}>
+              <Form onSubmit={this.addItem}>
                 <Form.Group className="mb-3" controlId="formItemName">
                   <Form.Label>Item Name</Form.Label>
                   <Form.Control
@@ -122,11 +159,15 @@ class Suppliers extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Coffee Beans</td>
-                    <td>$4.00</td>
-                    <td>Remove</td>
-                  </tr>
+                  {this.state.sellerContractMarketItems.map((item) => {
+                    return (
+                      <tr>
+                        <td>{item.name}</td>
+                        <td>${item.price}</td>
+                        <td>Remove</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </Table>
             </Tab>
@@ -136,20 +177,22 @@ class Suppliers extends Component {
                 <thead>
                   <tr>
                     <th>Order ID</th>
-                    <th>Customer</th>
                     <th>Item Name</th>
                     <th>Quantity</th>
-                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Mark</td>
-                    <td>Coffee Beans</td>
-                    <td>2</td>
-                    <td>Process</td>
-                  </tr>
+                  {this.state.buyerContractPurchasedItems.map((item) => {
+                    if (!item.status)
+                      return (
+                        <tr onClick={() => this.processOrder(item.id, 1)}>
+                          <td>{item.id}</td>
+                          <td>{item.name}</td>
+                          <td>{item.quantity}</td>
+                        </tr>
+                      );
+                    else return null;
+                  })}
                 </tbody>
               </Table>
               Processed Orders
@@ -157,18 +200,22 @@ class Suppliers extends Component {
                 <thead>
                   <tr>
                     <th>Order ID</th>
-                    <th>Customer</th>
                     <th>Item Name</th>
                     <th>Quantity</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>2</td>
-                    <td>Joe</td>
-                    <td>Coffee Beans</td>
-                    <td>5</td>
-                  </tr>
+                  {this.state.buyerContractPurchasedItems.map((item) => {
+                    if (item.status)
+                      return (
+                        <tr>
+                          <td>{item.id}</td>
+                          <td>{item.name}</td>
+                          <td>{item.quantity}</td>
+                        </tr>
+                      );
+                    else return null;
+                  })}
                 </tbody>
               </Table>
             </Tab>

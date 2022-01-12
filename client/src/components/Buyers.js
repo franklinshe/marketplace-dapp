@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import Card from "react-bootstrap/Card";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
@@ -21,13 +19,15 @@ class Buyers extends Component {
   }
 
   contractEventListeners = () => {
-    this.props.sellerContract.events
+    const { sellerContract, buyerContract } = this.props;
+
+    sellerContract.events
       .ItemAdded({
-        filter: {}, // Using an array means OR: e.g. 20 or 23
+        filter: {},
         fromBlock: 0,
       })
       .on("data", (event) => {
-        console.log(event); // same results as the optional callback above
+        console.log(event);
         this.setState({
           sellerContractMarketItems: [
             ...this.state.sellerContractMarketItems,
@@ -41,13 +41,13 @@ class Buyers extends Component {
       })
       .on("error", console.error);
 
-    this.props.buyerContract.events
+    buyerContract.events
       .OrderRaisedOrUpdated({
-        filter: {}, // Using an array means OR: e.g. 20 or 23
+        filter: {},
         fromBlock: 0,
       })
       .on("data", (event) => {
-        console.log(event); // same results as the optional callback above
+        console.log(event);
         this.setState({
           buyerContractPurchasedItems: [
             ...this.state.buyerContractPurchasedItems,
@@ -55,16 +55,34 @@ class Buyers extends Component {
               id: parseInt(event.returnValues.idOrder.toString()),
               name: event.returnValues.itemName.toString(),
               quantity: parseInt(event.returnValues.quantity.toString()),
-              status: event.returnValues.status.toString(),
+              status: event.returnValues.status,
             },
           ],
         });
-        console.log(this.state); // same results as the optional callback above
+      })
+      .on("error", console.error);
+
+    sellerContract.events
+      .ProcessAnOrder({
+        filter: {},
+        fromBlock: 0,
+      })
+      .on("data", (event) => {
+        console.log(event);
+        this.setState((prevState) => ({
+          buyerContractPurchasedItems:
+            prevState.buyerContractPurchasedItems.map((item) =>
+              item.id == event.returnValues.idOrder
+                ? { ...item, status: event.returnValues.status }
+                : item
+            ),
+        }));
+        console.log(this.state);
       })
       .on("error", console.error);
   };
 
-  purchaseThisItem = async (itemName) => {
+  purchaseItem = async (itemName) => {
     const { accounts, buyerContract } = this.props;
 
     await buyerContract.methods.purchaseItem(itemName, 1).send(
@@ -74,12 +92,9 @@ class Buyers extends Component {
       },
       (err, result) => {
         if (err) {
-          console.error(
-            "[Customer Contract] Error during purchasing an item",
-            err
-          );
+          console.error("[Customer Contract] Error purchasing item", err);
         } else {
-          console.log("[Customer Contract] - item purchased", result);
+          console.log("[Customer Contract] Item purchased", result);
         }
       }
     );
@@ -111,7 +126,7 @@ class Buyers extends Component {
                         <Button
                           variant="primary"
                           id="buttonPurchase"
-                          onClick={() => this.purchaseThisItem(item.name)}
+                          onClick={() => this.purchaseItem(item.name)}
                         >
                           Purchase
                         </Button>
@@ -139,7 +154,7 @@ class Buyers extends Component {
                         <td>{item.id}</td>
                         <td>{item.name}</td>
                         <td>{item.quantity}</td>
-                        <td>{item.status ? "No" : "Yes"}</td>
+                        <td>{item.status ? "Yes" : "No"}</td>
                       </tr>
                     );
                   })}
