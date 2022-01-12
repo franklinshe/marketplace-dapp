@@ -3,17 +3,22 @@ pragma solidity >=0.4.21 <8.10.0;
 
 contract Buyer {
     /* Events */
-    event OrderRaisedOrUpdated(uint256 idOrder);
+    event OrderRaisedOrUpdated(
+        uint256 idOrder,
+        string itemName,
+        uint256 quantity,
+        bool status
+    );
 
     struct AvailableCustomer {
         uint256 idCustomer;
-        bytes32 customerName;
+        string customerName;
     }
 
     struct Orderlog {
         uint256 idOrder;
         uint256 idCustomer;
-        bytes32 itemName;
+        string itemName;
         uint256 quantity;
         bool status;
     }
@@ -33,16 +38,20 @@ contract Buyer {
     }
 
     /* TRANSACTIONS */
-    function purchaseItem(bytes32 itemName, uint256 quantity) public {
+    function purchaseItem(string memory itemName, uint256 quantity) public {
         uint256 idOrder = numberOfItemsPurchased++;
         orderLogs[idOrder] = Orderlog(idOrder, 0, itemName, quantity, false);
-        emit OrderRaisedOrUpdated(idOrder);
+        emit OrderRaisedOrUpdated(idOrder, itemName, quantity, false);
     }
 
-    function recieveItem(uint256 idOrder) public {
+    function recieveItem(
+        uint256 idOrder,
+        string memory itemName,
+        uint256 quantity
+    ) public {
         numberOfItemsReceived++;
         orderLogs[idOrder].status = true;
-        emit OrderRaisedOrUpdated(idOrder);
+        emit OrderRaisedOrUpdated(idOrder, itemName, quantity, true);
     }
 
     /* GETTERS */
@@ -50,7 +59,7 @@ contract Buyer {
         public
         view
         returns (
-            bytes32,
+            string memory,
             uint256,
             bool
         )

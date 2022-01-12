@@ -10,17 +10,17 @@ class Suppliers extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sellerContract_blockchainRecordedItemIds: [],
+      sellerContractMarketItems: [],
       sellerContract_blockchainRecordedPurchaseOrderServices: [],
-      buyerContract_blockchainRecordedPurchaseOrderIds: [],
+      buyerContractPurchasedItems: [],
     };
   }
 
   componentDidMount() {
-    this.sellerContractEventListeners();
+    this.contractEventListeners();
   }
 
-  sellerContractEventListeners = () => {
+  contractEventListeners = () => {
     this.props.sellerContract.events
       .ItemAdded({
         filter: {}, // Using an array means OR: e.g. 20 or 23
@@ -29,67 +29,33 @@ class Suppliers extends Component {
       .on("data", (event) => {
         console.log(event); // same results as the optional callback above
         this.setState({
-          sellerContract_blockchainRecordedItemIds: [
-            ...this.state.sellerContract_blockchainRecordedItemIds,
-            parseInt(event.returnValues.idItem.toString()),
+          sellerContractMarketItems: [
+            ...this.state.sellerContractMarketItems,
+            {
+              id: parseInt(event.returnValues.idItem.toString()),
+              name: event.returnValues.itemName.toString(),
+              price: parseInt(event.returnValues.price.toString()),
+            },
           ],
         });
       })
       .on("error", console.error);
 
-    // this.props.sellerContract.events.ProcessAnOrder(
-    //   {},
-    //   {
-    //     fromBlock: 0,
-    //     toBlock: "latest",
-    //   },
-    //   (err, eventLogs) => {
-    //     if (err) {
-    //       console.error("[Event Listener Error]", err);
-    //     } else {
-    //       console.log("[Event Logs]", eventLogs);
-    //       this.setState({
-    //         supplierContract_blockchainRecordedPurchaseOrderServices: [
-    //           ...this.state
-    //             .supplierContract_blockchainRecordedPurchaseOrderServices,
-    //           {
-    //             idOfCustomer: parseInt(eventLogs.args.idOfCustomer.toString()),
-    //             idOrder: parseInt(eventLogs.args.idOrder.toString()),
-    //             status: eventLogs.args.status,
-    //           },
-    //         ],
-    //       });
-    //     }
-    //   }
-    // );
-
-    // this.props.buyerContract.events.OrderRaisedOrUpdated(
-    //   {},
-    //   {
-    //     fromBlock: 0,
-    //     toBlock: "latest",
-    //   },
-    //   (err, eventLogs) => {
-    //     if (err) {
-    //       console.error("[Event Listener Error]", err);
-    //     } else {
-    //       console.log("[Event Logs]", eventLogs);
-    //       if (
-    //         this.state.customerContract_blockchainRecordedPurchaseOrderIds.indexOf(
-    //           parseInt(eventLogs.args.idOrder.toString())
-    //         ) === -1
-    //       ) {
-    //         this.setState({
-    //           customerContract_blockchainRecordedPurchaseOrderIds: [
-    //             ...this.state
-    //               .customerContract_blockchainRecordedPurchaseOrderIds,
-    //             parseInt(eventLogs.args.idOrder.toString()),
-    //           ],
-    //         });
-    //       }
-    //     }
-    //   }
-    // );
+    this.props.buyerContract.events
+      .OrderRaisedOrUpdated({
+        filter: {}, // Using an array means OR: e.g. 20 or 23
+        fromBlock: 0,
+      })
+      .on("data", (event) => {
+        console.log(event); // same results as the optional callback above
+        this.setState({
+          buyerContractPurchasedItems: [
+            ...this.state.buyerContractPurchasedItems,
+            parseInt(event.returnValues.idOrder.toString()),
+          ],
+        });
+      })
+      .on("error", console.error);
   };
 
   addNewItemToMarketBySupplier = async (e) => {

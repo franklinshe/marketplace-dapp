@@ -12,15 +12,15 @@ class Buyers extends Component {
     super(props);
     this.state = {
       sellerContractMarketItems: [],
-      buyerContract_blockchainRecordedPurchaseOrderIds: [],
+      buyerContractPurchasedItems: [],
     };
   }
 
   componentDidMount() {
-    this.sellerContractEventListeners();
+    this.contractEventListeners();
   }
 
-  sellerContractEventListeners = () => {
+  contractEventListeners = () => {
     this.props.sellerContract.events
       .ItemAdded({
         filter: {}, // Using an array means OR: e.g. 20 or 23
@@ -40,13 +40,50 @@ class Buyers extends Component {
         });
       })
       .on("error", console.error);
+
+    this.props.buyerContract.events
+      .OrderRaisedOrUpdated({
+        filter: {}, // Using an array means OR: e.g. 20 or 23
+        fromBlock: 0,
+      })
+      .on("data", (event) => {
+        console.log(event); // same results as the optional callback above
+        this.setState({
+          buyerContractPurchasedItems: [
+            ...this.state.buyerContractPurchasedItems,
+            {
+              id: parseInt(event.returnValues.idOrder.toString()),
+              name: event.returnValues.itemName.toString(),
+              quantity: parseInt(event.returnValues.quantity.toString()),
+              status: event.returnValues.status.toString(),
+            },
+          ],
+        });
+        console.log(this.state); // same results as the optional callback above
+      })
+      .on("error", console.error);
   };
 
-  sellerContract_getItem(idItem) {
-    return this.props.sellerContract.methods
-      .getItem(idItem)
-      .call({ from: this.props.accounts[0] });
-  }
+  purchaseThisItem = async (itemName) => {
+    const { accounts, buyerContract } = this.props;
+
+    await buyerContract.methods.purchaseItem(itemName, 1).send(
+      {
+        from: accounts[0],
+        gas: 200000,
+      },
+      (err, result) => {
+        if (err) {
+          console.error(
+            "[Customer Contract] Error during purchasing an item",
+            err
+          );
+        } else {
+          console.log("[Customer Contract] - item purchased", result);
+        }
+      }
+    );
+  };
 
   render() {
     return (
@@ -62,30 +99,23 @@ class Buyers extends Component {
                       <Card.Body>
                         <Card.Title>{item.name}</Card.Title>
                         <Card.Text>${item.price}</Card.Text>
-                        <InputGroup className="mb-3">
-                          <Form.Select aria-label="quantity">
+                        {/* <InputGroup className="mb-3"> */}
+                        {/* <Form.Select aria-label="quantity">
                             <option>Quantity</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
                             <option value="4">4</option>
                             <option value="5">5</option>
-                          </Form.Select>
-                          <Button
-                            variant="primary"
-                            id="buttonPurchase"
-                            onClick={() =>
-                              this.purchaseThisItem({
-                                id: item.id,
-                                itemName: item.name,
-                                price: item.price,
-                                quantity: 1,
-                              })
-                            }
-                          >
-                            Purchase
-                          </Button>
-                        </InputGroup>
+                          </Form.Select> */}
+                        <Button
+                          variant="primary"
+                          id="buttonPurchase"
+                          onClick={() => this.purchaseThisItem(item.name)}
+                        >
+                          Purchase
+                        </Button>
+                        {/* </InputGroup> */}
                       </Card.Body>
                     </Card>
                   </div>
@@ -97,18 +127,22 @@ class Buyers extends Component {
                 <thead>
                   <tr>
                     <th>Order ID</th>
-                    <th>Seller</th>
                     <th>Item Name</th>
+                    <th>Quantity</th>
                     <th>Order Processed</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>2</td>
-                    <td>Jane</td>
-                    <td>Coffee Beans</td>
-                    <td>Yes</td>
-                  </tr>
+                  {this.state.buyerContractPurchasedItems.map((item) => {
+                    return (
+                      <tr>
+                        <td>{item.id}</td>
+                        <td>{item.name}</td>
+                        <td>{item.quantity}</td>
+                        <td>{item.status ? "No" : "Yes"}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </Table>
             </Tab>
