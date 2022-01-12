@@ -3,12 +3,12 @@ pragma solidity >=0.4.21 <8.10.0;
 
 contract Seller {
     /* Events */
-    event ItemAdded(uint256 idItem);
+    event ItemAdded(uint256 idItem, string itemName, uint256 price);
     event ProcessAnOrder(uint256 idOfCustomer, uint256 idOrder, bool status);
 
     struct Item {
         uint256 idItem;
-        bytes32 itemName;
+        string itemName;
         uint256 price;
     }
 
@@ -27,10 +27,10 @@ contract Seller {
     mapping(uint256 => Orderlog) orderLogs;
 
     /* TRANSACTIONS */
-    function addItem(bytes32 itemName, uint256 price) public {
+    function addItem(string memory itemName, uint256 price) public {
         uint256 idItem = numberOfItemsAvailableForSale++;
         items[idItem] = Item(idItem, itemName, price);
-        emit ItemAdded(idItem);
+        emit ItemAdded(idItem, itemName, price);
     }
 
     function processOrder(uint256 idOrder, uint256 idCustomer) public {
@@ -40,7 +40,11 @@ contract Seller {
     }
 
     /* GETTERS */
-    function getItem(uint256 idItem) public view returns (bytes32, uint256) {
+    function getItem(uint256 idItem)
+        public
+        view
+        returns (string memory, uint256)
+    {
         /*returns itemName and its price*/
         return (items[idItem].itemName, items[idItem].price);
     }

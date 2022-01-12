@@ -42,7 +42,6 @@ const App = () => {
       setAccounts(accounts);
       setBuyerContract(buyerInstance);
       setSellerContract(sellerInstance);
-      console.log(sellerInstance);
     }
 
     getContracts();

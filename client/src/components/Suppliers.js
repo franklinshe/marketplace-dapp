@@ -12,120 +12,111 @@ class Suppliers extends Component {
     this.state = {
       sellerContract_blockchainRecordedItemIds: [],
       sellerContract_blockchainRecordedPurchaseOrderServices: [],
-      customerContract_blockchainRecordedPurchaseOrderIds: [],
+      buyerContract_blockchainRecordedPurchaseOrderIds: [],
     };
-    console.log(this.state);
   }
 
-  // componentDidMount() {
-  //   this.triggerSupplierContractEventListeners();
-  //   console.log(this.state);
-  // }
+  componentDidMount() {
+    this.sellerContractEventListeners();
+  }
 
-  // triggerSupplierContractEventListeners() {
-  //   this.props.sellerContract.events.ItemAdded(
-  //     {},
-  //     {
-  //       fromBlock: 0,
-  //       toBlock: "latest",
-  //     },
-  //     (err, eventLogs) => {
-  //       if (err) {
-  //         console.error("[Event Listener Error]", err);
-  //       } else {
-  //         console.log("[Event Logs]", eventLogs);
-  //         this.setState({
-  //           supplierContract_blockchainRecordedItemIds: [
-  //             ...this.state.supplierContract_blockchainRecordedItemIds,
-  //             parseInt(eventLogs.args.idItem.toString()),
-  //           ],
-  //         });
-  //       }
-  //     }
-  //   );
+  sellerContractEventListeners = () => {
+    this.props.sellerContract.events
+      .ItemAdded({
+        filter: {}, // Using an array means OR: e.g. 20 or 23
+        fromBlock: 0,
+      })
+      .on("data", (event) => {
+        console.log(event); // same results as the optional callback above
+        this.setState({
+          sellerContract_blockchainRecordedItemIds: [
+            ...this.state.sellerContract_blockchainRecordedItemIds,
+            parseInt(event.returnValues.idItem.toString()),
+          ],
+        });
+      })
+      .on("error", console.error);
 
-  //   this.props.sellerContract.events.ProcessAnOrder(
-  //     {},
-  //     {
-  //       fromBlock: 0,
-  //       toBlock: "latest",
-  //     },
-  //     (err, eventLogs) => {
-  //       if (err) {
-  //         console.error("[Event Listener Error]", err);
-  //       } else {
-  //         console.log("[Event Logs]", eventLogs);
-  //         this.setState({
-  //           supplierContract_blockchainRecordedPurchaseOrderServices: [
-  //             ...this.state
-  //               .supplierContract_blockchainRecordedPurchaseOrderServices,
-  //             {
-  //               idOfCustomer: parseInt(eventLogs.args.idOfCustomer.toString()),
-  //               idOrder: parseInt(eventLogs.args.idOrder.toString()),
-  //               status: eventLogs.args.status,
-  //             },
-  //           ],
-  //         });
-  //       }
-  //     }
-  //   );
+    // this.props.sellerContract.events.ProcessAnOrder(
+    //   {},
+    //   {
+    //     fromBlock: 0,
+    //     toBlock: "latest",
+    //   },
+    //   (err, eventLogs) => {
+    //     if (err) {
+    //       console.error("[Event Listener Error]", err);
+    //     } else {
+    //       console.log("[Event Logs]", eventLogs);
+    //       this.setState({
+    //         supplierContract_blockchainRecordedPurchaseOrderServices: [
+    //           ...this.state
+    //             .supplierContract_blockchainRecordedPurchaseOrderServices,
+    //           {
+    //             idOfCustomer: parseInt(eventLogs.args.idOfCustomer.toString()),
+    //             idOrder: parseInt(eventLogs.args.idOrder.toString()),
+    //             status: eventLogs.args.status,
+    //           },
+    //         ],
+    //       });
+    //     }
+    //   }
+    // );
 
-  //   this.props.buyerContract.events.OrderRaisedOrUpdated(
-  //     {},
-  //     {
-  //       fromBlock: 0,
-  //       toBlock: "latest",
-  //     },
-  //     (err, eventLogs) => {
-  //       if (err) {
-  //         console.error("[Event Listener Error]", err);
-  //       } else {
-  //         console.log("[Event Logs]", eventLogs);
-  //         if (
-  //           this.state.customerContract_blockchainRecordedPurchaseOrderIds.indexOf(
-  //             parseInt(eventLogs.args.idOrder.toString())
-  //           ) === -1
-  //         ) {
-  //           this.setState({
-  //             customerContract_blockchainRecordedPurchaseOrderIds: [
-  //               ...this.state
-  //                 .customerContract_blockchainRecordedPurchaseOrderIds,
-  //               parseInt(eventLogs.args.idOrder.toString()),
-  //             ],
-  //           });
-  //         }
-  //       }
-  //     }
-  //   );
-  // }
+    // this.props.buyerContract.events.OrderRaisedOrUpdated(
+    //   {},
+    //   {
+    //     fromBlock: 0,
+    //     toBlock: "latest",
+    //   },
+    //   (err, eventLogs) => {
+    //     if (err) {
+    //       console.error("[Event Listener Error]", err);
+    //     } else {
+    //       console.log("[Event Logs]", eventLogs);
+    //       if (
+    //         this.state.customerContract_blockchainRecordedPurchaseOrderIds.indexOf(
+    //           parseInt(eventLogs.args.idOrder.toString())
+    //         ) === -1
+    //       ) {
+    //         this.setState({
+    //           customerContract_blockchainRecordedPurchaseOrderIds: [
+    //             ...this.state
+    //               .customerContract_blockchainRecordedPurchaseOrderIds,
+    //             parseInt(eventLogs.args.idOrder.toString()),
+    //           ],
+    //         });
+    //       }
+    //     }
+    //   }
+    // );
+  };
 
   addNewItemToMarketBySupplier = async (e) => {
     e.preventDefault();
-    const { web3, accounts, sellerContract } = this.props;
+    const { accounts, sellerContract } = this.props;
     const itemName = e.target.elements.formItemName.value;
     const price = e.target.elements.formPrice.value;
 
-    const response = await sellerContract.methods
-      .addItem(web3.utils.asciiToHex(itemName), price)
-      .send(
-        {
-          from: accounts[0],
-          gas: 200000,
+    await sellerContract.methods.addItem(itemName, price).send(
+      {
+        from: accounts[0],
+        gas: 200000,
+      },
+      function (err, result) {
+        if (err) {
+          console.error(
+            "[Supplier Contract] Error during adding new item to marketPlace",
+            err
+          );
+        } else {
+          console.log(
+            "[Supplier Contract] - New Item added to Marketplace",
+            result
+          );
         }
-        // function (err, result) {
-        //   if (err) {
-        //     console.error(
-        //       "[Supplier Contract] Error during adding new item to marketPlace",
-        //       err
-        //     );
-        //   } else {
-        //     console.log(
-        //       "[Supplier Contract] - New Item added to Marketplace",
-        //       result
-        //     );
-        //   }
-        // }
-      );
+      }
+    );
   };
 
   render() {
@@ -168,9 +159,7 @@ class Suppliers extends Component {
                   <tr>
                     <td>Coffee Beans</td>
                     <td>$4.00</td>
-                    <td>
-                      <a>Remove</a>
-                    </td>
+                    <td>Remove</td>
                   </tr>
                 </tbody>
               </Table>
@@ -193,9 +182,7 @@ class Suppliers extends Component {
                     <td>Mark</td>
                     <td>Coffee Beans</td>
                     <td>2</td>
-                    <td>
-                      <a>Process</a>
-                    </td>
+                    <td>Process</td>
                   </tr>
                 </tbody>
               </Table>
