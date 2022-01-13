@@ -7,6 +7,7 @@ import Suppliers from "./components/Suppliers";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Navbar from "react-bootstrap/Navbar";
 
 import "./App.css";
 
@@ -66,9 +67,11 @@ const App = () => {
 
   return (
     <div className="App">
-      <h1>Marketplace Dapp</h1>
       <Container>
-        <Row>
+        <Row className="mt-5">
+          <h1>Decentralized Marketplace</h1>
+        </Row>
+        <Row className="mt-5">
           <Col xs={12} md={6}>
             {web3 && accounts && buyerContract && sellerContract && (
               <Buyers
