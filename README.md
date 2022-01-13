@@ -2,6 +2,8 @@
 
 Simple buy/sell marketplace with Ethereum blockchain backend built with [React](https://reactjs.org/), [Truffle](https://trufflesuite.com/boxes/react/), [web3.js](https://web3js.readthedocs.io/en/v1.5.2/), [React Bootstrap](https://react-bootstrap.github.io/)
 
+Requires [MetaMask](https://metamask.io/download.html) extension and account!
+
 ## Setup
 
 - Run the development console `truffle develop`
