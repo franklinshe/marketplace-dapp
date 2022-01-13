@@ -1,6 +1,6 @@
 # marketplace-dapp
 
-Built with [React](https://reactjs.org/), [Truffle](https://trufflesuite.com/boxes/react/), [web3.js](https://web3js.readthedocs.io/en/v1.5.2/), [React Bootstrap](https://react-bootstrap.github.io/)
+Simple buy/sell marketplace with Ethereum blockchain backend built with [React](https://reactjs.org/), [Truffle](https://trufflesuite.com/boxes/react/), [web3.js](https://web3js.readthedocs.io/en/v1.5.2/), [React Bootstrap](https://react-bootstrap.github.io/)
 
 ## Setup
 
