@@ -5,8 +5,8 @@ Simple buy/sell marketplace with Ethereum blockchain backend built with [React](
 ## Setup
 
 - Run the development console `truffle develop`
-- Compile `compile` and migrate `migrate` the smart contracts inside the development console. 
-- In another terminal, run the react app `cd client`, `npm install`, `npm run start`.
+- Compile `compile` and migrate `migrate` the smart contracts inside the development console
+- In another terminal, run the react app `cd client`, `npm install`, `npm run start`
 
 ## Screenshot
 ![Screenshot](screenshot.png)
