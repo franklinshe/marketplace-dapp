@@ -33,7 +33,7 @@ class Suppliers extends Component {
           sellerContractMarketItems: [
             ...this.state.sellerContractMarketItems,
             {
-              id: parseInt(event.returnValues.idItem.toString()),
+              id: parseInt(event.returnValues.itemId.toString()),
               name: event.returnValues.itemName.toString(),
               price: parseInt(event.returnValues.price.toString()),
             },
@@ -43,7 +43,7 @@ class Suppliers extends Component {
       .on("error", console.error);
 
     buyerContract.events
-      .OrderRaisedOrUpdated({
+      .ItemPurchased({
         filter: {},
         fromBlock: 0,
       })
@@ -64,7 +64,7 @@ class Suppliers extends Component {
       .on("error", console.error);
 
     sellerContract.events
-      .ProcessAnOrder({
+      .ProcessOrder({
         filter: {},
         fromBlock: 0,
       })
@@ -77,6 +77,21 @@ class Suppliers extends Component {
                 ? { ...item, status: event.returnValues.status }
                 : item
             ),
+        }));
+      })
+      .on("error", console.error);
+
+    sellerContract.events
+      .ItemRemoved({
+        filter: {},
+        fromBlock: 0,
+      })
+      .on("data", (event) => {
+        console.log(event);
+        this.setState((prevState) => ({
+          sellerContractMarketItems: prevState.sellerContractMarketItems.filter(
+            (item) => item.id != event.returnValues.itemId
+          ),
         }));
         console.log(this.state);
       })
@@ -98,7 +113,25 @@ class Suppliers extends Component {
         if (err) {
           console.error("[Supplier Contract] Error adding item", err);
         } else {
-          console.log("[Supplier Contract] New item added", result);
+          console.log("[Supplier Contract] Item added", result);
+        }
+      }
+    );
+  };
+
+  removeItem = async (itemId) => {
+    const { accounts, sellerContract } = this.props;
+
+    await sellerContract.methods.removeItem(itemId).send(
+      {
+        from: accounts[0],
+        gas: 200000,
+      },
+      function (err, result) {
+        if (err) {
+          console.error("[Supplier Contract] Error removing item", err);
+        } else {
+          console.log("[Supplier Contract] Item removed", result);
         }
       }
     );
@@ -155,24 +188,23 @@ class Suppliers extends Component {
                   <tr>
                     <th>Item Name</th>
                     <th>Price</th>
-                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   {this.state.sellerContractMarketItems.map((item) => {
                     return (
-                      <tr>
+                      <tr onClick={() => this.removeItem(item.id)}>
                         <td>{item.name}</td>
                         <td>${item.price}</td>
-                        <td>Remove</td>
                       </tr>
                     );
                   })}
                 </tbody>
               </Table>
+              Click to Remove Listing
             </Tab>
             <Tab eventKey="process" title="Process Orders">
-              Orders to be processed
+              Click to Process Order
               <Table striped bordered hover size="sm">
                 <thead>
                   <tr>

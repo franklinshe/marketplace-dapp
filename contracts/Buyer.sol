@@ -3,7 +3,7 @@ pragma solidity >=0.4.21 <8.10.0;
 
 contract Buyer {
     // Events
-    event OrderRaisedOrUpdated(
+    event ItemPurchased(
         uint256 idOrder,
         string itemName,
         uint256 quantity,
@@ -11,7 +11,7 @@ contract Buyer {
     );
 
     // Structs
-    struct Orderlog {
+    struct Order {
         uint256 idOrder;
         uint256 idCustomer;
         string itemName;
@@ -21,15 +21,14 @@ contract Buyer {
 
     // State
     uint256 numberOfItemsPurchased;
-    uint256 numberOfItemsReceived;
 
     // Mappings
-    mapping(uint256 => Orderlog) orderLogs;
+    mapping(uint256 => Order) orders;
 
     // Functions
     function purchaseItem(string memory itemName, uint256 quantity) public {
         uint256 idOrder = numberOfItemsPurchased++;
-        orderLogs[idOrder] = Orderlog(idOrder, 0, itemName, quantity, false);
-        emit OrderRaisedOrUpdated(idOrder, itemName, quantity, false);
+        orders[idOrder] = Order(idOrder, 0, itemName, quantity, false);
+        emit ItemPurchased(idOrder, itemName, quantity, false);
     }
 }

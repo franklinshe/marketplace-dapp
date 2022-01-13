@@ -32,7 +32,7 @@ class Buyers extends Component {
           sellerContractMarketItems: [
             ...this.state.sellerContractMarketItems,
             {
-              id: parseInt(event.returnValues.idItem.toString()),
+              id: parseInt(event.returnValues.itemId.toString()),
               name: event.returnValues.itemName.toString(),
               price: parseInt(event.returnValues.price.toString()),
             },
@@ -42,7 +42,7 @@ class Buyers extends Component {
       .on("error", console.error);
 
     buyerContract.events
-      .OrderRaisedOrUpdated({
+      .ItemPurchased({
         filter: {},
         fromBlock: 0,
       })
@@ -63,7 +63,7 @@ class Buyers extends Component {
       .on("error", console.error);
 
     sellerContract.events
-      .ProcessAnOrder({
+      .ProcessOrder({
         filter: {},
         fromBlock: 0,
       })
@@ -76,6 +76,21 @@ class Buyers extends Component {
                 ? { ...item, status: event.returnValues.status }
                 : item
             ),
+        }));
+      })
+      .on("error", console.error);
+
+    sellerContract.events
+      .ItemRemoved({
+        filter: {},
+        fromBlock: 0,
+      })
+      .on("data", (event) => {
+        console.log(event);
+        this.setState((prevState) => ({
+          sellerContractMarketItems: prevState.sellerContractMarketItems.filter(
+            (item) => item.id != event.returnValues.itemId
+          ),
         }));
         console.log(this.state);
       })
