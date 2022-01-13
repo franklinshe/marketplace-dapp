@@ -8,3 +8,5 @@ Built with [React](https://reactjs.org/), [Truffle](https://trufflesuite.com/box
 - Compile `compile` and migrate `migrate` the smart contracts inside the development console. 
 - In another terminal, run the react app `cd client`, `npm install`, `npm run start`.
 
+## Screenshot
+![Screenshot](screenshot.png)
